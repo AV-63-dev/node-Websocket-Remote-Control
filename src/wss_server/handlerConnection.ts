@@ -1,6 +1,7 @@
 import { WebSocket, createWebSocketStream } from 'ws';
 import { mouseUp, mouseDown, mouseLeft, mouseRight, mousePosition } from '../commands/mouse.js';
 import { drawCircle, drawSquare, drawRectangle } from '../commands/draw.js';
+import { prntScrn } from '../commands/screen.js';
 
 export const handlerConnection = (ws:WebSocket) => {
     const stream = createWebSocketStream(ws, {
@@ -36,6 +37,9 @@ export const handlerConnection = (ws:WebSocket) => {
                 case 'draw_rectangle':
                     stream.write(await drawRectangle(instructionArr[1], instructionArr[2]));
                     break;
+                case 'prnt_scrn':
+                    stream.write(await prntScrn());
+                    break;
                 default:
                     console.log("A instruction has arrived, but I don't know anything about it!");
                     break;
@@ -43,8 +47,6 @@ export const handlerConnection = (ws:WebSocket) => {
         } catch {
             console.log('Oh-oh! Error)))');
         };
-
-        console.log('handlerConnection: ',data)
     });
     
 };

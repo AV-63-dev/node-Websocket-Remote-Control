@@ -15,7 +15,7 @@ console.log(`Start static http server on the ${HTTP_PORT} port!`);
 httpServer.listen(HTTP_PORT, () => { console.log(`Static http server running on port ${HTTP_PORT}`) });
 
 process.on('SIGINT', () => {
-    wss.close();
     console.log('all servers stopped');
+    wss.close();
     httpServer.close(() => process.exit());
 });

@@ -1,9 +1,6 @@
 import { WebSocket, createWebSocketStream } from 'ws';
-import { mouseUp } from '../commands/mouseUp.js';
-import { mouseDown } from '../commands/mouseDown.js';
-import { mouseLeft } from '../commands/mouseLeft.js';
-import { mouseRight } from '../commands/mouseRight.js';
-import { mousePosition } from '../commands/mousePosition.js';
+import { mouseUp, mouseDown, mouseLeft, mouseRight, mousePosition } from '../commands/mouse.js';
+import { drawCircle, drawSquare, drawRectangle } from '../commands/draw.js';
 
 export const handlerConnection = (ws:WebSocket) => {
     const stream = createWebSocketStream(ws, {
@@ -30,11 +27,21 @@ export const handlerConnection = (ws:WebSocket) => {
                 case 'mouse_position':
                     stream.write(await mousePosition());
                     break;
-                default:
+                case 'draw_circle':
+                    stream.write(await drawCircle(instructionArr[1]));
                     break;
-            };            
+                case 'draw_square':
+                    stream.write(await drawSquare(instructionArr[1]));
+                    break;
+                case 'draw_rectangle':
+                    stream.write(await drawRectangle(instructionArr[1], instructionArr[2]));
+                    break;
+                default:
+                    console.log("A instruction has arrived, but I don't know anything about it!");
+                    break;
+            };
         } catch {
-
+            console.log('Oh-oh! Error)))');
         };
 
         console.log('handlerConnection: ',data)
